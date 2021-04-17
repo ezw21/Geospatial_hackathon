@@ -1,31 +1,58 @@
 from flask import Flask, render_template
 import cv2
 from PIL import Image
+import glob
 
 import time
 
+global images
 
 app = Flask(__name__)
 
+
+
+def readImages(images_folder):
+    global images
+    filenames = glob.glob(images_folder + "/*.jpg" )
+    images = []
+    for i in range(0, len(filenames)):
+        filename = filenames[i].split("\\")[-1]
+        images.append((filename, cv2.imread(filenames[i])))
+    return images
+
+
+
 @app.route('/')
 def home():
-    return render_template("index.html")
+    global images
+    images = readImages("static")
+    return render_template("index.html", images=images)
+
+
+@app.route('/overlay_image', methods=["POST"])
+def overlay_image():
+    for filename, image in images:
+        value = request.form.get(filename)
+        if value:
+            result = superimpose_image(image)
+            
+
+
+
+
+    
 
 @app.route('/t')
-def superimpose_image():
+def superimpose_image(image):
     # im1 = Image.open("014.jpg")
     # im2 = Image.open("018.jpg")
     # im3 = Image.open("007.jpg")
     # newim = Image.blend(im1, im2, alpha=1)
     # newim.save("static/result.jpg")
 
-    im1 = cv2.imread("014.jpg")
-    im2 = cv2.imread("018.jpg")
-    im3 = cv2.imread("007.jpg")
-    dst = cv2.addWeighted(im1, 0.5, im2, 0.5, 0.5)
-    dstt = cv2.addWeighted(dst, 0.5, im3, 0.5, 0.5)
-    cv2.imwrite("static/result.jpg", dstt)
-    return render_template('event.html')
+    im1 = cv2.imread("drunk_duan.jpg")
+    dst = cv2.addWeighted(im1, 0.5, image, 0.5, 0.5)
+    cv2.imwrite("static/result.jpg", dst)
 
 
 @app.after_request

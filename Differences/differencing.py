@@ -2,12 +2,24 @@ from skimage.metrics import structural_similarity
 import cv2
 import numpy as np
 
-before = cv2.imread('sat0.jpg')
-after = cv2.imread('sat1.jpg')
+before = cv2.imread('differences/img0.jpg')
+after = cv2.imread('differences/img1.jpg')
+
+""" 
+image_size will store image.shape 
+which is a 3obj tuple (dimension_y, dimension_x, RBG)
+"""
+#print(before)
+#print(after)
+before_size = before.shape
+after_size = after.shape
+print("Before_size = "  + str(before_size))     #To see te dimension of before_size
+print("After_size = "   + str(after_size))      #To see te dimension of after_size
 
 # create after with grids
 after_with_grid = after.copy()
 height, width, channels = after_with_grid.shape
+
 for i in range(0, width, 30):
     cv2.line(after_with_grid, (i, 0), (i, height), (0, 0, 0), 1)
 for i in range(0, height, 30):
@@ -19,7 +31,7 @@ after_gray = cv2.cvtColor(after, cv2.COLOR_BGR2GRAY)
 
 # Compute SSIM between two images
 (score, diff) = structural_similarity(before_gray, after_gray, full=True)
-print("Image similarity", score)
+print("Image similarity = ", score)
 
 # The diff image contains the actual image differences between the two images
 # and is represented as a floating point data type in the range [0,1] 
@@ -45,15 +57,35 @@ for c in contours:
         bouding_boxes.append((x,y,w,h))
         cv2.rectangle(before, (x, y), (x + w, y + h), (36,255,12), 2)
         cv2.rectangle(after, (x, y), (x + w, y + h), (36,255,12), 2)
+        cv2.putText(before, 'point', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2) #labels
         cv2.drawContours(mask, [c], 0, (0,255,0), -1)
         cv2.drawContours(filled_after, [c], 0, (0,255,0), -1)
 
 
-print(bouding_boxes)
-cv2.imshow('before', before)
-cv2.imshow('after', after)
-cv2.imshow('diff',diff)
-cv2.imshow('mask',mask)
-cv2.imshow('filled after',filled_after)
+
+print("box_count = " + str(len(bouding_boxes)) +  " \n >> " + str(bouding_boxes))
+#cv2.imshow('before', before)
+#cv2.imshow('after', after)
+#cv2.imshow('diff',diff)
+#cv2.imshow('mask',mask)
+#cv2.imshow('filled after',filled_after)
 cv2.imshow('after with grid', after_with_grid)
 cv2.waitKey(0)
+
+"""
+ Impact assessment part 
+list_1 = [(x,y,w,h), (obj2.1)]
+list_2 = [(name, shape_size, bla), (obj_2.2)]
+
+>>list_3 = [((x,y,w,h), (name, shape_size, bla)), (obj2.12)]
+
+for i in range(len(list_1)):
+    list_3.append((list_1[i], list2[i]))
+
+print(list_3)
+
+list_1 = bouding_boxes
+
+list_2 = []
+"""
+

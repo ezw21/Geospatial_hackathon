@@ -5,7 +5,11 @@
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
-        <img class="img-fluid" src="{{ url_for('static', filename='drunk_duan.jpg') }}" class="rounded float-left" alt="...">
+          {% if result %}
+            <img class="img-fluid" src="{{ url_for('static', filename='result.jpg') }}" class="rounded float-left" alt="...">
+            {% else %}
+            <img class="img-fluid" src="{{ url_for('static', filename='drunk_duan.jpg') }}" class="rounded float-left" alt="...">
+          {% endif %}
       </div>
     </div>
     <div class="col-sm-6">
@@ -13,8 +17,9 @@
         <div class="overflow-auto">
             <ul class="list-group list-group-flush">
                 {% for filename, image in images %}
-                <form action = "/overlay_image" method="POST">
-                    <div class="list-group-item list-group-item-action">
+                <form action = "{{ url_for('overlay_image')}}" method="POST">
+                    <button type="submit" class="list-group-item list-group-item-action" name="{{filename}}" value=True>{{ filename }}</button>
+                    <!-- <div class="list-group-item list-group-item-action">
                         <div class="row"> 
                             <div class="col-2">
                                 <input type="checkbox" name="{{filename}}">
@@ -23,7 +28,7 @@
                                 <label class="checkbox-inline">{{ filename }}</label>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </form>
                 {% endfor %}
                 <li class="list-group-item">An item</li>

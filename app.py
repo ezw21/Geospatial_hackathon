@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import cv2
 from PIL import Image
 import glob
@@ -31,15 +31,16 @@ def home():
 
 @app.route('/overlay_image', methods=["POST"])
 def overlay_image():
+    global images
+    images = readImages("static")
     for filename, image in images:
         value = request.form.get(filename)
+        print(value)
         if value:
-            result = superimpose_image(image)
-            
-
-
-
-
+            im1 = cv2.imread("static/" + filename)
+            cv2.imwrite("static/result.jpg", im1)
+            return render_template("index.html", result=True, images=images)
+    return render_template("index.html", result=None, images=images)
     
 
 @app.route('/t')

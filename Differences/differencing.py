@@ -56,10 +56,10 @@ for c in contours:
  
         x,y,w,h = cv2.boundingRect(c)
         bouding_boxes.append((x,y,w,h))
-        cv2.rectangle(before, (x, y), (x + w, y + h), (36,255,12), 2)
-        cv2.putText(before, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 2) #labels
-        cv2.rectangle(after, (x, y), (x + w, y + h), (36,255,12), 2)
-        cv2.putText(after, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 2) #labels
+        cv2.rectangle(before, (x, y), (x + w, y + h), (36,255,12), 1)
+        cv2.putText(before, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 1) #labels
+        cv2.rectangle(after, (x, y), (x + w, y + h), (36,255,12), 1)
+        cv2.putText(after, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 1) #labels
         cv2.drawContours(mask, [c], 0, (0,255,0), -1)
         cv2.drawContours(filled_after, [c], 0, (0,255,0), -1)
         index += 1

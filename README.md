@@ -15,3 +15,8 @@ https://www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution
 
 this.this.this.this
 https://www.geodesy.linz.govt.nz/gdb/
+
+nwLat = -43.51966700;
+nwLong = 172.61154000;
+seLat = -43.54825600;
+seLong = 172.66042900;

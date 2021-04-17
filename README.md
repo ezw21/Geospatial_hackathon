@@ -20,3 +20,9 @@ nwLat = -43.51966700;
 nwLong = 172.61154000;
 seLat = -43.54825600;
 seLong = 172.66042900;
+
+
+this.this.this.this
+https://www.earthdatascience.org/courses/use-data-open-source-python/intro-raster-data-python/fundamentals-raster-data/open-lidar-raster-python/
+
+https://towardsdatascience.com/how-to-automate-lidar-point-cloud-processing-with-python-a027454a536c

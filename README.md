@@ -12,3 +12,6 @@ https://catalogue.data.govt.nz/dataset?q=flood&sort=score+desc%2C+metadata_modif
 
 this.this.this
 https://www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution
+
+this.this.this.this
+https://www.geodesy.linz.govt.nz/gdb/

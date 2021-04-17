@@ -26,3 +26,5 @@ this.this.this.this
 https://www.earthdatascience.org/courses/use-data-open-source-python/intro-raster-data-python/fundamentals-raster-data/open-lidar-raster-python/
 
 https://towardsdatascience.com/how-to-automate-lidar-point-cloud-processing-with-python-a027454a536c
+
+A compilation of open-sourced repo for object recognition : https://github.com/robmarkcole/satellite-image-deep-learning

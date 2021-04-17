@@ -49,6 +49,7 @@ mask = np.zeros(before.shape, dtype='uint8')
 filled_after = after.copy()
 
 bouding_boxes = []
+index = 1
 for c in contours:
     area = cv2.contourArea(c)
     if area > 40:
@@ -56,20 +57,21 @@ for c in contours:
         x,y,w,h = cv2.boundingRect(c)
         bouding_boxes.append((x,y,w,h))
         cv2.rectangle(before, (x, y), (x + w, y + h), (36,255,12), 2)
+        cv2.putText(before, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 2) #labels
         cv2.rectangle(after, (x, y), (x + w, y + h), (36,255,12), 2)
-        cv2.putText(before, 'point', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2) #labels
+        cv2.putText(after, 'point'+ str(index), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36,255,12), 2) #labels
         cv2.drawContours(mask, [c], 0, (0,255,0), -1)
         cv2.drawContours(filled_after, [c], 0, (0,255,0), -1)
-
+        index += 1
 
 
 print("box_count = " + str(len(bouding_boxes)) +  " \n >> " + str(bouding_boxes))
-#cv2.imshow('before', before)
-#cv2.imshow('after', after)
+cv2.imshow('before', before)
+# cv2.imshow('after', after)
 #cv2.imshow('diff',diff)
 #cv2.imshow('mask',mask)
 #cv2.imshow('filled after',filled_after)
-cv2.imshow('after with grid', after_with_grid)
+# cv2.imshow('after with grid', after_with_grid)
 cv2.waitKey(0)
 
 """

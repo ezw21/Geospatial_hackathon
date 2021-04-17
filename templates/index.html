@@ -2,14 +2,30 @@
 {% block title %}Erskine_133{% endblock %}
 {% block content %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-8">
-            <img class="img-fluid" src="{{ url_for('static', filename='drunk_duan.jpg') }}" class="rounded float-left" alt="...">
-        </div>
-        <div class="col-4">
-          <div class="overflow-auto">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <img class="img-fluid" src="{{ url_for('static', filename='drunk_duan.jpg') }}" class="rounded float-left" alt="...">
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card" style="height:25rem;">
+        <div class="overflow-auto">
             <ul class="list-group list-group-flush">
+                {% for filename, image in images %}
+                <form action = "/overlay_image" method="POST">
+                    <div class="list-group-item list-group-item-action">
+                        <div class="row"> 
+                            <div class="col-2">
+                                <input type="checkbox" name="{{filename}}">
+                            </div>
+                            <div class="col-8">
+                                <label class="checkbox-inline">{{ filename }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {% endfor %}
                 <li class="list-group-item">An item</li>
                 <li class="list-group-item">A second item</li>
                 <li class="list-group-item">A third item</li>
@@ -49,8 +65,31 @@
         </div>
       </div>
     </div>
+  </div>
 
-</div>
+  <div class="card text-center">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+
+
+
 
 
 {% endblock %}

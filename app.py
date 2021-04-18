@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import cv2
 from PIL import Image
 import glob
-
+import json
 import time
 
 global images
@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 def readImages(images_folder):
     global images
-    filenames = glob.glob(images_folder + "/*.jpg" )
+    filenames = glob.glob(images_folder + "/*.png" )
     images = []
     for i in range(0, len(filenames)):
         filename = filenames[i].split("\\")[-1]
@@ -21,26 +21,38 @@ def readImages(images_folder):
     return images
 
 
+def loadReport(json_file):
+    with open(json_file) as json_file:
+        data = json.load(json_file)
+        report = []
+        for key in data.keys():
+            report.append((key, data[key]))
+        return report
+
+
+
 
 @app.route('/')
 def home():
     global images
     images = readImages("static")
-    return render_template("index.html", images=images)
+    report = loadReport("json/e_set.txt")
+    return render_template("index.html", images=images, report=report)
 
 
 @app.route('/overlay_image', methods=["POST"])
 def overlay_image():
     global images
     images = readImages("static")
+    report = loadReport("json/e_set.txt")
     for filename, image in images:
         value = request.form.get(filename)
         print(value)
         if value:
             im1 = cv2.imread("static/" + filename)
             cv2.imwrite("static/result.jpg", im1)
-            return render_template("index.html", result=True, images=images)
-    return render_template("index.html", result=None, images=images)
+            return render_template("index.html", result=True, images=images, report=report)
+    return render_template("index.html", result=None, images=images, report=report)
     
 
 @app.route('/t')

@@ -8,6 +8,11 @@ from PIL import Image as im
 import time 
 import csv 
 
+fields = ["x", "y"]
+rows = []
+filename = "./Raster/flood_record.csv"
+
+
 def normalize(array):
     array_min, array_max = array.min(), array.max()
     print(array_min, array_max)
@@ -51,17 +56,6 @@ with rasterio.open('../Hackathon/water_detect_input/17APR08224828-M3DS-013930604
     print("this")
     print(stack[2440][3530]) # y and x
 
-    with open("./Raster/water_record.csv") as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        print(csv_reader)
-        next(csv_reader)
-        for row in csv_reader:
-            print(row)
-            x = float(row[0])
-            y = float(row[1])
-            if x > dataset.bounds.left and x < dataset.bounds.right and y > dataset.bounds.bottom and y < dataset.bounds.top:
-                row, col = dataset.index(x, y)
-                stack[row][col] = [0,0,0]
 
     t0 = time.time()
     for i in range(dataset.height):
@@ -69,7 +63,31 @@ with rasterio.open('../Hackathon/water_detect_input/17APR08224828-M3DS-013930604
             if not (stack[i][j][0] >= 0.105 and stack[i][j][1] >= 0.073 and stack[i][j][2] >= 0.105 and stack[i][j][0] <= 0.233 and stack[i][j][1] <= 0.245 and stack[i][j][2] <= 0.217):
                 stack[i][j] = [0, 0, 0]
             else:
-                stack[i][j] = [0, 0, 0.1]
+                stack[i][j] = [1, 0, 0]
+                x, y = dataset.transform * (j, i)
+                rows.append([x, y])
+
+    t1 = time.time()
+    total = t1 - t0
+    print(total)
+
+    with open(filename, 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+
+        csvwriter.writerow(fields)
+        csvwriter.writerows(rows)
+
+    t0 = time.time()
+    with open("./Raster/water_record.csv") as csvfile:
+        csv_reader = csv.reader(csvfile, delimiter=',')
+        print(csv_reader)
+        next(csv_reader)
+        for row in csv_reader:
+            x = float(row[0])
+            y = float(row[1])
+            if x > dataset.bounds.left and x < dataset.bounds.right and y > dataset.bounds.bottom and y < dataset.bounds.top:
+                row, col = dataset.index(x, y)
+                stack[row][col] = [0,0,1]
     t1 = time.time()
     total = t1 - t0
     print(total)

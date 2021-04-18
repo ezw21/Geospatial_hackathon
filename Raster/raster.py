@@ -56,27 +56,6 @@ with rasterio.open('../Hackathon/water_detect_input/17APR08224828-M3DS-013930604
     print("this")
     print(stack[2440][3530]) # y and x
 
-
-    t0 = time.time()
-    for i in range(dataset.height):
-        for j in range(dataset.width):
-            if not (stack[i][j][0] >= 0.105 and stack[i][j][1] >= 0.073 and stack[i][j][2] >= 0.105 and stack[i][j][0] <= 0.233 and stack[i][j][1] <= 0.245 and stack[i][j][2] <= 0.217):
-                stack[i][j] = [0, 0, 0]
-            else:
-                stack[i][j] = [1, 0, 0]
-                x, y = dataset.transform * (j, i)
-                rows.append([x, y])
-
-    t1 = time.time()
-    total = t1 - t0
-    print(total)
-
-    with open(filename, 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile)
-
-        csvwriter.writerow(fields)
-        csvwriter.writerows(rows)
-
     t0 = time.time()
     with open("./Raster/water_record.csv") as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
@@ -91,35 +70,30 @@ with rasterio.open('../Hackathon/water_detect_input/17APR08224828-M3DS-013930604
     t1 = time.time()
     total = t1 - t0
     print(total)
-    #stack[2440][3530] = [1, 0, 0]   # change one pixel
-
-    # rescaled = (255.0 / stack.max() * (stack - stack.min())).astype(np.uint8)
-    # image = im.fromarray(rescaled)
-    # image.save('Raster/754.png')
-    # stack = np.dstack((band_4_norm, band_5_norm, band_1_norm))
-    # rescaled = (255.0 / stack.max() * (stack - stack.min())).astype(np.uint8)
-    # image = im.fromarray(rescaled)
-    # image.save('Raster/451.png')
-    # stack = np.dstack((band_5_norm, band_4_norm, band_3_norm))
-    # rescaled = (255.0 / stack.max() * (stack - stack.min())).astype(np.uint8)
-    # image = im.fromarray(rescaled)
-    # image.save('Raster/543.png')
-    # stack = np.dstack((band_5_norm, band_6_norm, band_4_norm))
-    # rescaled = (255.0 / stack.max() * (stack - stack.min())).astype(np.uint8)
-    # image = im.fromarray(rescaled)
-    # image.save('Raster/564.png')
 
 
-    # # f, axarr = pyplot.subplots(2, sharex = True)
+    t0 = time.time()
+    for i in range(dataset.height):
+        for j in range(dataset.width):
+            if not (stack[i][j][0] >= 0.105 and stack[i][j][1] >= 0.073 and stack[i][j][2] >= 0.105 and stack[i][j][0] <= 0.233 and stack[i][j][1] <= 0.245 and stack[i][j][2] <= 0.217):
+                stack[i][j] = [0, 0, 0]
+            elif (stack[i][j][0] != 0 and stack[i][j][1] != 0 and stack[i][j][2] != 1):
+                stack[i][j] = [1, 0, 0]
+                x, y = dataset.transform * (j, i)
+                rows.append([x, y])
 
-    # # axarr[0].imshow(stack)
-    # # axarr[1].imshow(dataset.read(5))
+    t1 = time.time()
+    total = t1 - t0
+    print(total)
+
+    with open(filename, 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+
+        csvwriter.writerow(fields)
+        csvwriter.writerows(rows)
+
     pyplot.imshow(stack)
     pyplot.show()
-    
-    # image = dataset.read([4,3,2])
-    # image = (255 * image / np.max(image)).astype(np.uint8)
-    # show(image)
 
     # Extract feature shapes and values from the array.
     for geom, val in rasterio.features.shapes(

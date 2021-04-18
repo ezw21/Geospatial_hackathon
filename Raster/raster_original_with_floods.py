@@ -51,10 +51,27 @@ with rasterio.open('../Hackathon/water_detect_input/20MAR28221842-M3DS-013930604
 
     stack = np.dstack((band_4, band_3, band_2))
 
-    show(stack)
-    # image = dataset.read([4,3,2])
-    # image = (255 * image / np.max(image)).astype(np.uint8)
-    # show(image)
+    stack_min = stack.min()
+    stack_max = stack.max()
+
+    t0 = time.time()
+    with open("./Raster/flood_record.csv") as csvfile:
+        csv_reader = csv.reader(csvfile, delimiter=',')
+        print(csv_reader)
+        next(csv_reader)
+        for row in csv_reader:
+            x = float(row[0])
+            y = float(row[1])
+            if x > dataset.bounds.left and x < dataset.bounds.right and y > dataset.bounds.bottom and y < dataset.bounds.top:
+                row, col = dataset.index(x, y)
+    
+                stack[row][col][0] = stack_max
+    t1 = time.time()
+    total = t1 - t0
+    print(total)
+    
+    pyplot.imshow(stack)
+    pyplot.show()
 
     # Extract feature shapes and values from the array.
     for geom, val in rasterio.features.shapes(

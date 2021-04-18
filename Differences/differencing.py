@@ -2,15 +2,15 @@ from skimage.metrics import structural_similarity
 import cv2
 import numpy as np
 
-before = cv2.imread('differences/img0.jpg')
-after = cv2.imread('differences/img1.jpg')
+before = cv2.imread('differences/17APR08224828-M3DS-013930604400_01_P002-BROWSE.jpg')
+after = cv2.imread('differences/17APR08224828-M3DS-013930604400_01_P002-BROWSE.jpg')
 
 """ 
 image_size will store image.shape 
 which is a 3obj tuple (dimension_y, dimension_x, RBG)
 """
-#print(before)
-#print(after)
+print(before)
+print(after)
 before_size = before.shape
 after_size = after.shape
 print("Before_size = "  + str(before_size))     #To see te dimension of before_size
@@ -67,7 +67,7 @@ for c in contours:
 
 print("box_count = " + str(len(bouding_boxes)) +  " \n >> " + str(bouding_boxes))
 cv2.imshow('before', before)
-# cv2.imshow('after', after)
+cv2.imshow('after', after)
 #cv2.imshow('diff',diff)
 #cv2.imshow('mask',mask)
 #cv2.imshow('filled after',filled_after)
